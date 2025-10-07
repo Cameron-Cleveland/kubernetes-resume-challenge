@@ -1,3 +1,4 @@
+
 ![Kubernetes Resume Challenge](screenshots/01-docker/docker-build-process.png)
 
 # **Kubernetes Resume Challenge: Step-by-Step Guide for Beginners**
@@ -26,7 +27,9 @@ Before we begin, ensure you have:
 # **Step 1: Containerize the E-Commerce Web App**  
 
 ### **A. Create a Dockerfile**  
-![Dockerfile](screenshots/04-deployment/project-files-with-yaml.png)  
+
+![Dockerfile](screenshots/04-deployment/project-files-with-yaml.png)
+
 Navigate to your project directory and create a `Dockerfile`:  
 
 ```dockerfile
@@ -58,14 +61,18 @@ Push to Docker Hub:
 
 sh
 docker push yourdockerhubusername/ecom-web:v1
+
 ![docker-push-success](screenshots/01-docker/docker-push-success.png)
+
 ![docker-images-list](screenshots/01-docker/docker-images-list.png)
+
 Outcome: Your web app is now containerized and available on Docker Hub.
 
 Step 2: Prepare the Database (MariaDB)
 Instead of building a custom DB image, we'll use the official MariaDB image in Kubernetes.
 
 A. Create a Database Initialization Script (db-load-script.sql)
+
 ![database-sql-script](screenshots/02-database/database-sql-script.png)
 
 sql
@@ -95,15 +102,20 @@ aws eks --region us-east-1 update-kubeconfig --name my-cluster  # AWS
 gcloud container clusters get-credentials my-cluster --region us-central1  # GCP
 az aks get-credentials --resource-group my-resource-group --name my-cluster  # Azure
 Verify cluster access:
+
 ![kubectl-get-nodes](screenshots/03-kubernetes-setup/kubectl-get-nodes.png)
 
 sh
 kubectl get nodes
+
 ![eks-cluster-creating](screenshots/03-kubernetes-setup/eks-cluster-creating.png)
+
 ![eks-cluster-active](screenshots/03-kubernetes-setup/eks-cluster-active.png)
+
 Outcome: You now have a working Kubernetes cluster!
 
 Step 3.5: Create Database Secret
+
 ![create-db-secret](screenshots/07-troubleshooting/create-db-secret.png)
 
 bash
@@ -115,6 +127,7 @@ kubectl create secret generic db-secret \
 kubectl get secret db-secret -o yaml
 Step 4: Deploy the Website to Kubernetes
 A. Create a website-deployment.yaml
+
 ![website-deployment-yaml](screenshots/04-deployment/website-deployment-yaml.png)
 
 yaml
@@ -150,7 +163,9 @@ spec:
         - name: DB_NAME
           value: "ecom_db"
 B. Deploy MariaDB with Persistent Storage
+
 ![mysql-deployment-yaml](screenshots/04-deployment/mysql-deployment-yaml.png)
+
 Create mysql-deployment.yaml:
 
 yaml
@@ -196,6 +211,7 @@ spec:
         persistentVolumeClaim:
           claimName: mysql-pvc
 Create mysql-service.yaml:
+
 ![mysql-service-yaml](screenshots/04-deployment/mysql-service-yaml.png)
 
 yaml
@@ -211,6 +227,7 @@ spec:
       port: 3306
       targetPort: 3306
 Create a PersistentVolumeClaim (mysql-pvc.yaml) for database storage:
+
 ![persistent-volume-claim](screenshots/04-deployment/persistent-volume-claim.png)
 
 yaml
@@ -225,6 +242,7 @@ spec:
     requests:
       storage: 5Gi
 C. Apply All Configurations
+
 ![initial-deployment-apply](screenshots/07-troubleshooting/initial-deployment-apply.png)
 
 sh
@@ -236,11 +254,14 @@ Verify pods are running:
 
 sh
 kubectl get pods
+
 ![pods-running-success](screenshots/07-troubleshooting/pods-running-success.png)
+
 Outcome: Your website and database are now running in Kubernetes!
 
 Step 5: Expose the Website with a Load Balancer
 Create website-service.yaml:
+
 ![loadbalancer-service-yaml](screenshots/05-advanced/loadbalancer-service-yaml.png)
 
 yaml
@@ -257,11 +278,13 @@ spec:
       port: 80
       targetPort: 80
 Apply it:
+
 ![apply-loadbalancer](screenshots/05-advanced/apply-loadbalancer.png)
 
 sh
 kubectl apply -f website-service.yaml
 Get the external IP:
+
 ![loadbalancer-external-ip](screenshots/05-advanced/loadbalancer-external-ip.png)
 
 sh
@@ -277,6 +300,7 @@ Create a ConfigMap:
 sh
 kubectl create configmap feature-toggle-config --from-literal=FEATURE_DARK_MODE=true
 Update website-deployment.yaml to include:
+
 ![deployment-with-configmap](screenshots/05-advanced/deployment-with-configmap.png)
 
 yaml
@@ -298,6 +322,7 @@ Scale up for increased traffic:
 sh
 kubectl scale deployment ecom-web --replicas=6
 Verify scaling:
+
 ![pods-scaled-to-6.](screenshots/06-monitoring/pods-scaled-to-6.png)
 
 sh
@@ -315,6 +340,7 @@ docker push yourdockerhubusername/ecom-web:v2
 Update website-deployment.yaml to use v2.
 
 Apply changes:
+
 ![rolling-update-success](screenshots/06-monitoring/rolling-update-success.png)
 
 sh
@@ -327,6 +353,7 @@ Outcome: Zero-downtime update!
 
 Step 9: Roll Back a Deployment
 If the update fails:
+
 ![rollback-deployment](screenshots/06-monitoring/rollback-deployment-1.png)
 
 sh
@@ -335,11 +362,13 @@ Outcome: The app reverts to the previous stable version!
 
 Step 10: Autoscale Based on CPU
 Create a Horizontal Pod Autoscaler (HPA):
+
 ![hpa-command](screenshots/06-monitoring/hpa-command-2.png)
 
 sh
 kubectl autoscale deployment ecom-web --cpu-percent=50 --min=2 --max=10
 Verify autoscaling:
+
 ![hpa-created](screenshots/06-monitoring/hpa-created.png)
 
 sh
@@ -348,6 +377,7 @@ Outcome: Kubernetes scales pods automatically under load!
 
 Step 11: Implement Liveness & Readiness Probes
 Update website-deployment.yaml:
+
 ![deployment-with-probes-yaml](screenshots/05-advanced/deployment-with-probes-yaml.png)
 
 yaml
@@ -363,8 +393,11 @@ readinessProbe:
     port: 80
   initialDelaySeconds: 5
   periodSeconds: 10
+
 ![health-endpoint-php](screenshots/05-advanced/health-endpoint-php.png)
+
 ![ready-endpoint-php](screenshots/05-advanced/ready-endpoint-php.png)
+
 Outcome: Kubernetes ensures only healthy pods serve traffic!
 
 Troubleshooting Summary
@@ -372,7 +405,9 @@ During this project, I encountered and resolved several real-world issues across
 
 1️⃣ Docker Image & Database Connection
 Issue: The web app failed to connect to MySQL despite successful deployment.
+
 ![pods-failing-imagepullbackoff](screenshots/07-troubleshooting/pods-failing-imagepullbackoff.png)
+
 Root Cause:
 
 Incorrect hostname in connection.php (localhost instead of the Kubernetes service name mysql-service)
@@ -384,6 +419,7 @@ Fix:
 Updated DB_HOST to mysql-service in the PHP connection script
 
 Rebuilt the Docker image and redeployed:
+
 ![fixed-deployment-yaml](screenshots/07-troubleshooting/fixed-deployment-yaml-1.png)
 
 bash
@@ -392,12 +428,15 @@ docker push username/ecom-web:v2
 kubectl set image deployment/ecom-web ecom-web=username/ecom-web:v2
 2️⃣ Storage Issues
 Issue: Pods stuck in Pending state due to storage problems.
+
 ![storage-scheduling-error](screenshots/07-troubleshooting/storage-scheduling-error.png)
+
 Fix: Updated PVC storage class and recreated resources.
 
 3️⃣ Probes Configuration
 Issue: Liveness/readiness probes failing initially.
 Fix: Added proper health.php and ready.php endpoints.
+
 ![pod-with-probes-running](screenshots/05-advanced/pod-with-probes-running.png)
 
 Next Steps:
@@ -428,3 +467,4 @@ kubernetes-resume-challenge/
 🙏 Acknowledgements
 Original project source: detronetdip/E-commerce
 Kubernetes tutorials: Anton Putra Tutorials
+ 
