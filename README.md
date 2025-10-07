@@ -241,6 +241,14 @@ spec:
     app: mysql
   ports:
     - protocol: TCP
+
+<!-- TEST SECTION -->
+## Test at 50% point
+
+![Test 1](screenshots/01-docker/docker-build-process.png)
+![Test 2](screenshots/01-docker/docker-push-success.png)
+![Test 3](screenshots/03-kubernetes-setup/kubectl-get-nodes.png)
+
       port: 3306
       targetPort: 3306
 Create a PersistentVolumeClaim (mysql-pvc.yaml) for database storage:
