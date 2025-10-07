@@ -5,11 +5,11 @@
 Welcome to this comprehensive walkthrough of the **Kubernetes Resume Challenge**! This guide is designed for beginners who want to gain hands-on experience with **Docker, Kubernetes, and DevOps best practices** while building a real-world e-commerce application deployment.  
 
 By the end of this project, you will:  
-✅ **Containerize** a web app and database  
-✅ **Deploy** to a Kubernetes cluster (AWS/Azure/GCP)  
-✅ **Scale, update, and roll back** deployments  
-✅ **Use ConfigMaps, Secrets, and Helm**  
-✅ **Implement CI/CD and Persistent Storage**  
+- **Containerize** a web app and database  
+- **Deploy** to a Kubernetes cluster (AWS/Azure/GCP)  
+- **Scale, update, and roll back** deployments  
+- **Use ConfigMaps, Secrets, and Helm**  
+- **Implement CI/CD and Persistent Storage**  
 
 ---
 
