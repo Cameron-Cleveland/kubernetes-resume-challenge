@@ -1,13 +1,3 @@
-<!-- TEST SECTION START -->
-# Test Section
-
-![Test 1](screenshots/01-docker/docker-build-process.png)
-![Test 2](screenshots/01-docker/docker-push-success.png)
-![Test 3](screenshots/03-kubernetes-setup/kubectl-get-nodes.png)
-
-<!-- TEST SECTION END -->
-
-
 ![Kubernetes Resume Challenge](screenshots/01-docker/docker-build-process.png)
 
 # **Kubernetes Resume Challenge: Step-by-Step Guide for Beginners**
