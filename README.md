@@ -117,6 +117,14 @@ Verify cluster access:
 sh
 kubectl get nodes
 
+
+<!-- TEST SECTION -->
+## Test at 25% point
+
+![Test 1](screenshots/01-docker/docker-build-process.png)
+![Test 2](screenshots/01-docker/docker-push-success.png)
+![Test 3](screenshots/03-kubernetes-setup/kubectl-get-nodes.png)
+
 ![eks-cluster-creating](screenshots/03-kubernetes-setup/eks-cluster-creating.png)
 
 ![eks-cluster-active](screenshots/03-kubernetes-setup/eks-cluster-active.png)
