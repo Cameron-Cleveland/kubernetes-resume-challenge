@@ -1,0 +1,60 @@
+# Docker
+Dockerfile.bak
+docker-compose.override.yml
+
+# Kubernetes
+kubeconfig
+*.kubeconfig
+.kube/
+
+# Logs
+*.log
+logs/
+
+# Environment files (contains secrets!)
+.env
+.env.local
+.env.production
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Local development files that shouldn't be committed
+.docker/
+.cache/
+.terraform/
+
+# Backup files
+*.bak
+*.backup
+
+# Local overrides
+*-local.yaml
+*-override.yaml
+
+# Certificate files (if any)
+*.pem
+*.key
+*.crt
+
+# Specific to your project - if you have any local test files
+test-*
+local-*

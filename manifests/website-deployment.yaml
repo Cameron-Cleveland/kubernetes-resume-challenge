@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecom-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecom-web
+  template:
+    metadata:
+      labels:
+        app: ecom-web
+    spec:
+      containers:
+        - name: ecom-web
+          image: cameronlcleveland/ecom-web-project:v5
+          ports:
+            - containerPort: 80
+          env:
+            - name: DB_HOST
+              value: "mysql-service"
+            - name: DB_USER
+              value: "admin"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: password
+            - name: DB_NAME
+              value: "ecom_db"
+            - name: MERCHANT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: payment-secret
+                  key: merchant-key
+            - name: SALT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: payment-secret
+                  key: salt-key
+            - name: FEATURE_DARK_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: feature-toggle-config
+                  key: FEATURE_DARK_MODE
+          livenessProbe:
+            httpGet:
+              path: /health.php
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready.php
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
