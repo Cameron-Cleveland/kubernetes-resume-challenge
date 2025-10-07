@@ -58,15 +58,15 @@ Push to Docker Hub:
 
 sh
 docker push yourdockerhubusername/ecom-web:v1
-(screenshots/01-docker/docker-push-success.png)
-(screenshots/01-docker/docker-images-list.png)
+![docker-push-success](screenshots/01-docker/docker-push-success.png)
+![docker-images-list](screenshots/01-docker/docker-images-list.png)
 Outcome: Your web app is now containerized and available on Docker Hub.
 
 Step 2: Prepare the Database (MariaDB)
 Instead of building a custom DB image, we'll use the official MariaDB image in Kubernetes.
 
 A. Create a Database Initialization Script (db-load-script.sql)
-(screenshots/02-database/database-sql-script.png)
+![database-sql-script](screenshots/02-database/database-sql-script.png)
 
 sql
 CREATE DATABASE IF NOT EXISTS ecom_db;
@@ -95,16 +95,16 @@ aws eks --region us-east-1 update-kubeconfig --name my-cluster  # AWS
 gcloud container clusters get-credentials my-cluster --region us-central1  # GCP
 az aks get-credentials --resource-group my-resource-group --name my-cluster  # Azure
 Verify cluster access:
-(screenshots/03-kubernetes-setup/kubectl-get-nodes.png)
+![kubectl-get-nodes](screenshots/03-kubernetes-setup/kubectl-get-nodes.png)
 
 sh
 kubectl get nodes
-(screenshots/03-kubernetes-setup/eks-cluster-creating.png)
-(screenshots/03-kubernetes-setup/eks-cluster-active.png)
+![eks-cluster-creating](screenshots/03-kubernetes-setup/eks-cluster-creating.png)
+![eks-cluster-active](screenshots/03-kubernetes-setup/eks-cluster-active.png)
 Outcome: You now have a working Kubernetes cluster!
 
 Step 3.5: Create Database Secret
-(screenshots/07-troubleshooting/create-db-secret.png)
+![create-db-secret](screenshots/07-troubleshooting/create-db-secret.png)
 
 bash
 kubectl create secret generic db-secret \
@@ -115,7 +115,7 @@ kubectl create secret generic db-secret \
 kubectl get secret db-secret -o yaml
 Step 4: Deploy the Website to Kubernetes
 A. Create a website-deployment.yaml
-(screenshots/04-deployment/website-deployment-yaml.png)
+![website-deployment-yaml](screenshots/04-deployment/website-deployment-yaml.png)
 
 yaml
 apiVersion: apps/v1
@@ -150,7 +150,7 @@ spec:
         - name: DB_NAME
           value: "ecom_db"
 B. Deploy MariaDB with Persistent Storage
-(screenshots/04-deployment/mysql-deployment-yaml.png)
+![mysql-deployment-yaml](screenshots/04-deployment/mysql-deployment-yaml.png)
 Create mysql-deployment.yaml:
 
 yaml
@@ -196,7 +196,7 @@ spec:
         persistentVolumeClaim:
           claimName: mysql-pvc
 Create mysql-service.yaml:
-(screenshots/04-deployment/mysql-service-yaml.png)
+![mysql-service-yaml](screenshots/04-deployment/mysql-service-yaml.png)
 
 yaml
 apiVersion: v1
@@ -211,7 +211,7 @@ spec:
       port: 3306
       targetPort: 3306
 Create a PersistentVolumeClaim (mysql-pvc.yaml) for database storage:
-(screenshots/04-deployment/persistent-volume-claim.png)
+![persistent-volume-claim](screenshots/04-deployment/persistent-volume-claim.png)
 
 yaml
 apiVersion: v1
@@ -225,7 +225,7 @@ spec:
     requests:
       storage: 5Gi
 C. Apply All Configurations
-(screenshots/07-troubleshooting/initial-deployment-apply.png)
+![initial-deployment-apply](screenshots/07-troubleshooting/initial-deployment-apply.png)
 
 sh
 kubectl apply -f mysql-pvc.yaml
@@ -236,12 +236,12 @@ Verify pods are running:
 
 sh
 kubectl get pods
-(screenshots/07-troubleshooting/pods-running-success.png)
+![pods-running-success](screenshots/07-troubleshooting/pods-running-success.png)
 Outcome: Your website and database are now running in Kubernetes!
 
 Step 5: Expose the Website with a Load Balancer
 Create website-service.yaml:
-(screenshots/05-advanced/loadbalancer-service-yaml.png)
+![loadbalancer-service-yaml](screenshots/05-advanced/loadbalancer-service-yaml.png)
 
 yaml
 apiVersion: v1
@@ -257,12 +257,12 @@ spec:
       port: 80
       targetPort: 80
 Apply it:
-(screenshots/05-advanced/apply-loadbalancer.png)
+![apply-loadbalancer](screenshots/05-advanced/apply-loadbalancer.png)
 
 sh
 kubectl apply -f website-service.yaml
 Get the external IP:
-(screenshots/05-advanced/loadbalancer-external-ip.png)
+![loadbalancer-external-ip](screenshots/05-advanced/loadbalancer-external-ip.png)
 
 sh
 kubectl get svc ecom-web-service
@@ -277,7 +277,7 @@ Create a ConfigMap:
 sh
 kubectl create configmap feature-toggle-config --from-literal=FEATURE_DARK_MODE=true
 Update website-deployment.yaml to include:
-(screenshots/05-advanced/deployment-with-configmap.png)
+![deployment-with-configmap](screenshots/05-advanced/deployment-with-configmap.png)
 
 yaml
 env:
@@ -298,7 +298,7 @@ Scale up for increased traffic:
 sh
 kubectl scale deployment ecom-web --replicas=6
 Verify scaling:
-(screenshots/06-monitoring/pods-scaled-to-6.png)
+![pods-scaled-to-6.](screenshots/06-monitoring/pods-scaled-to-6.png)
 
 sh
 kubectl get pods
@@ -315,7 +315,7 @@ docker push yourdockerhubusername/ecom-web:v2
 Update website-deployment.yaml to use v2.
 
 Apply changes:
-(screenshots/06-monitoring/rolling-update-success.png)
+![rolling-update-success](screenshots/06-monitoring/rolling-update-success.png)
 
 sh
 kubectl apply -f website-deployment.yaml
@@ -327,7 +327,7 @@ Outcome: Zero-downtime update!
 
 Step 9: Roll Back a Deployment
 If the update fails:
-(screenshots/06-monitoring/rollback-deployment-1.png)
+![rollback-deployment](screenshots/06-monitoring/rollback-deployment-1.png)
 
 sh
 kubectl rollout undo deployment/ecom-web
@@ -335,12 +335,12 @@ Outcome: The app reverts to the previous stable version!
 
 Step 10: Autoscale Based on CPU
 Create a Horizontal Pod Autoscaler (HPA):
-(screenshots/06-monitoring/hpa-command-2.png)
+![hpa-command](screenshots/06-monitoring/hpa-command-2.png)
 
 sh
 kubectl autoscale deployment ecom-web --cpu-percent=50 --min=2 --max=10
 Verify autoscaling:
-(screenshots/06-monitoring/hpa-created.png)
+![hpa-created](screenshots/06-monitoring/hpa-created.png)
 
 sh
 kubectl get hpa
@@ -348,7 +348,7 @@ Outcome: Kubernetes scales pods automatically under load!
 
 Step 11: Implement Liveness & Readiness Probes
 Update website-deployment.yaml:
-(screenshots/05-advanced/deployment-with-probes-yaml.png)
+![deployment-with-probes-yaml](screenshots/05-advanced/deployment-with-probes-yaml.png)
 
 yaml
 livenessProbe:
@@ -363,8 +363,8 @@ readinessProbe:
     port: 80
   initialDelaySeconds: 5
   periodSeconds: 10
-(screenshots/05-advanced/health-endpoint-php.png)
-(screenshots/05-advanced/ready-endpoint-php.png)
+![health-endpoint-php](screenshots/05-advanced/health-endpoint-php.png)
+![ready-endpoint-php](screenshots/05-advanced/ready-endpoint-php.png)
 Outcome: Kubernetes ensures only healthy pods serve traffic!
 
 Troubleshooting Summary
@@ -372,7 +372,7 @@ During this project, I encountered and resolved several real-world issues across
 
 1️⃣ Docker Image & Database Connection
 Issue: The web app failed to connect to MySQL despite successful deployment.
-(screenshots/07-troubleshooting/pods-failing-imagepullbackoff.png)
+![pods-failing-imagepullbackoff](screenshots/07-troubleshooting/pods-failing-imagepullbackoff.png)
 Root Cause:
 
 Incorrect hostname in connection.php (localhost instead of the Kubernetes service name mysql-service)
@@ -384,7 +384,7 @@ Fix:
 Updated DB_HOST to mysql-service in the PHP connection script
 
 Rebuilt the Docker image and redeployed:
-(screenshots/07-troubleshooting/fixed-deployment-yaml-1.png)
+![fixed-deployment-yaml](screenshots/07-troubleshooting/fixed-deployment-yaml-1.png)
 
 bash
 docker build -t username/ecom-web:v2 .
@@ -392,13 +392,13 @@ docker push username/ecom-web:v2
 kubectl set image deployment/ecom-web ecom-web=username/ecom-web:v2
 2️⃣ Storage Issues
 Issue: Pods stuck in Pending state due to storage problems.
-(screenshots/07-troubleshooting/storage-scheduling-error.png)
+![storage-scheduling-error](screenshots/07-troubleshooting/storage-scheduling-error.png)
 Fix: Updated PVC storage class and recreated resources.
 
 3️⃣ Probes Configuration
 Issue: Liveness/readiness probes failing initially.
 Fix: Added proper health.php and ready.php endpoints.
-(screenshots/05-advanced/pod-with-probes-running.png)
+![pod-with-probes-running](screenshots/05-advanced/pod-with-probes-running.png)
 
 Next Steps:
 
