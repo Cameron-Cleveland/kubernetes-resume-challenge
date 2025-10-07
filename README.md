@@ -1,3 +1,5 @@
+https://screenshots/01-docker/docker-build-process.png
+
 Kubernetes Resume Challenge: Step-by-Step Guide for Beginners
 Welcome to this comprehensive walkthrough of the Kubernetes Resume Challenge! This guide is designed for beginners who want to gain hands-on experience with Docker, Kubernetes, and DevOps best practices while building a real-world e-commerce application deployment.
 
