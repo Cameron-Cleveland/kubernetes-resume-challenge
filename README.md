@@ -60,7 +60,7 @@ ENV DB_NAME=ecom_db
 # Expose port 80 for web traffic
 EXPOSE 80
 B. Build and Push the Docker Image
-(screenshots/01-docker/docker-build-process.png)
+![docker-build-process](screenshots/01-docker/docker-build-process.png)
 
 Build the image:
 
