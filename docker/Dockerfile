@@ -9,8 +9,7 @@ COPY src/ /var/www/html/
 
 # Update database connection to use Kubernetes service (replace placeholders)
 ENV DB_HOST=mysql-service
-ENV DB_USER=admin
-ENV DB_PASSWORD=password
+ENV DB_USER=ecom_user
 ENV DB_NAME=ecom_db
 
 # Expose port 80 for web traffic
